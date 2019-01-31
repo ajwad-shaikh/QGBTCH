@@ -1,4 +1,21 @@
-﻿Plane point set minimum convex hull is for a given set of points
+﻿//
+
+Exact Transcript for Calculation - 设点集S的点数量为N，点的分布相对均匀，栅格化时栅格总数为M，行列数分别为L和C，这里L×C＝M。
+若将点集S视作一个完整的空间目标，而采用栅格辅助法剔除无关点的过程可看作是提取空间目标S的边界线（栅格形式），边界栅格占总栅格数比例k越小，则保留下来的点数越少，换言之，剔除无关点的效果越好。
+当S中点的分布近似于矩形时，待保留的边界栅格数为２（L＋C－２），则栅格保留比k＝２（L＋C－２）/ M≈２（L/M＋１/L），当栅格总数M确定时，则该式中L＝C＝ (root)M时可得到k的最小值，此时栅格场的行列数相同。
+设栅格总数为M，行列数L＝C＝ (root)M，平均每个栅格的点数为n＝N/M，平均每行的点数为m＝NL＝N/(root)M。就单独一行而言，如图２所示，该行两端格网内的２n个点需保留，n≥ １ 时，保留比k＝２n/m＝２/(root)M，该式表明n越小则保留比k越小；n≤１时，平均每个网格内分布不到１个点，由于行两端的点始终会被保留，因此，两端网格内的点数应计为２（不是２n），此时k＝２/m＝２/ (root)M，n取值越大则k越小。
+由此可见，当n＝１ 即平均每个网格有１ 个数据点时，保留比k最小，对无关点的剔除效果最佳，此时栅格场的行列数为L＝C＝ (root)N。
+
+Set the number of points of point set S to N, and the distribution of points is relatively uniform. When rasterizing, the total number of grids is M, and the number of rows and columns is L and C respectively, where L×C=M.
+If the point set S is regarded as a complete spatial target, the process of eliminating the unrelated points by the grid-assisted method can be regarded as the boundary line (grid form) of the extracted space target S, and the boundary raster accounts for the total number of grids. The smaller k is, the fewer points are retained, in other words, the better the effect of eliminating irrelevant points.
+When the distribution of points in S is approximated to a rectangle, the number of boundary rasters to be retained is 2 (L+C-2), and the grid retention ratio is k=2(L+C-2)/ M≈2(L/M+1/L). When the total number of grids M is determined, the minimum value of k can be obtained when L=C=(root)M in the formula, and the number of rows and columns of the grid field is the same.
+Let the total number of grids be M, the number of rows and columns L=C=(root)M, the average number of points per grid is n=N/M, and the average number of points per line is m=NL=N/(root)M. For a single line, as shown in Figure 2, 2n points in the grid at both ends of the line need to be retained. When n≥ 1, the ratio of retention is k=2n/m=2/(root)M, which indicates n The smaller the smaller, the smaller the retention ratio k; when n≤1, the average distribution is less than 1 point in each grid. Since the points at both ends of the line are always retained, the number of points in the two ends of the grid should be counted as 2 (not 2n), at this time k=2/m=2/ (root) M, the larger the value, the smaller k is.
+It can be seen that when n=1, that is, each grid has 1 data point, the retention ratio k is the smallest, and the rejection effect on the irrelevant points is the best. At this time, the number of rows and columns of the grid field is L=C= (root )N.
+
+
+// Rough Translation of Entire Text
+
+Plane point set minimum convex hull is for a given set of points
 牦, can contain all the points in the set and the vertices belong to the set
 The smallest convex polygon [1]. The smallest convex hull is the shape of the object
 An important tool for feature extraction and feature extraction, the minimum convex hull algorithm is also
