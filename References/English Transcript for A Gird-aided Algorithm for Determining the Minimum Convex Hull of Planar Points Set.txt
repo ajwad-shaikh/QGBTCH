@@ -1,0 +1,209 @@
+﻿Plane point set minimum convex hull is for a given set of points
+牦, can contain all the points in the set and the vertices belong to the set
+The smallest convex polygon [1]. The smallest convex hull is the shape of the object
+An important tool for feature extraction and feature extraction, the minimum convex hull algorithm is also
+Applied to many areas, such as pattern recognition, data mining, resource allocation
+Set and image processing, etc. [1  10].
+In order to improve the performance of the algorithm, researchers at home and abroad have designed
+A variety of algorithms [3-12], roughly divided into wrapping method, internal and external methods, scanning
+Law, division and treatment. With the deepening of the application, large-scale planar point set convex
+The generation of packages has become an important issue in areas such as GIS.
+The rasterization method has strong scalability, small algorithm complexity, and algorithm
+High efficiency, its ideas are widely used in GIS related
+In the algorithm [22, 23].
+1 Grid-assisted convex hull generation algorithm
+Alk et al. [24] proposed a method of partitioning by extreme points.
+Perform preprocessing of point sets; Golin et al. [25] utilizes rectangles and slashes
+The method of merging the equations obtains a maximal quadrilateral in the convex hull,
+The points in the quadrilateral are removed in advance. These two methods are compared
+The former is easy to implement and can effectively eliminate most of the convex hulls.
+Points are more widely used, as in the literature [26, 27]
+Pretreatment is carried out by this method.
+In order to improve the efficiency of the internal point rough judgment, the author draws on the GIS often
+Using the grid method idea, a grid-assisted point set pre-design is designed.
+The basic idea of ​​the processing method is as follows: Create a set that can cover the point set.
+The grid field, calculate the position of each point in the grid field (line number,
+Column number), then put each row leftmost, rightmost grid and each column most
+The points in the upper and lower grids are retained, and the rest of the points are eliminated.
+Point, only use the remaining points to build with Graham scanning algorithm
+Establish a minimum convex hull. As shown in Figure 1, the point set in the figure contains 100
+Discrete points, the created grid field is 10 rows × 10 columns, which needs to be retained
+Is the point in the following grid unit (the gray grid in the figure): 1st
+Rows and columns of lines, lines and columns of line 2, ..., line 10
+Columns and columns, as well as rows 4 and 6 of the array, number 3 of the array
+And 7 lines, ..., the 4th and 7th lines of the queue.
+Figure 1 data point set culling process
+Fig. 1 ProcessofRejectingPointsSet
+The convex hull generation algorithm designed according to the above ideas, its complete step
+The steps are as follows: 1 Calculate the spatial extent of the point set and determine the grid field parameters.
+Number (grid size, number of rows and columns, etc.); 2 defines 4 one-dimensional arrays
+Left_Col, Right_Col, Top_Row, Bottom_Row,
+To store the order of the leftmost and rightmost columns with discrete points on each line.
+No., each column has the highest and lowest serial number of the discrete point distribution;
+Wuhan University Journal·Information Science Edition April 2010
+3 Scan the set of points, calculate and record the rows of each point in the raster field
+Column number, which can be stored by extending the point data structure and defining the independent
+Array and other methods are implemented, and the calculation is updated in step 2 as defined.
+Array; 4 extract points with full condition, use for these reserved points
+The Graham scanning algorithm establishes a convex hull, and the extraction condition is: decision point
+Located in the leftmost (or rightmost) column of the row it is in, or the most
+Up (or bottom) line.
+In Figure 1, when the number of rows and columns is 1, all points will be protected.
+Stay behind; when the number of rows and columns is large (such as 1000 rows × 1000
+Column), resulting in an average distribution of less than 1 point on each line, the point where
+The column is obviously also the leftmost and right column of the data point on the line, according to
+The rules will also be preserved. Due to the difference in the distribution of points
+Never calculate the theoretical row with the best rejection
+There are certain difficulties in the number of columns, and only some preliminary analysis is done here.
+The number of points in the set of points is 荦, and the distribution of points is relatively
+Evenly, the total number of rasters is 犕, and the number of rows and columns is 犔 and
+Hey, here 犔×犆=犕. If the point set is despised as a complete
+Space target, and the process of eliminating extraneous points by grid-assisted method
+Can be seen as the boundary line (grid form) that extracts the spatial target 牦,
+The smaller the ratio of the boundary raster to the total number of rasters, the more it remains.
+The fewer the points, in other words, the better the effect of eliminating irrelevant points. When
+The number of boundary rasters to be retained when the distribution of the midpoint is approximate to a rectangle
+For 2(犔+犆-2), the grid retention ratio 犽=2(犔+犆-2)
+! 犕≈2(犔!犕+1!犔), when the total number of grids is determined
+When the formula is 犔=犆=槡犕, the minimum value of 犽 can be obtained.
+The number of rows and columns of the raster field is the same at this time.
+Let the total number of grids be 犕, the number of rows and columns 犔 = 犆 = 槡犕, average
+The number of points per grid is = 荦!犕, the average number of points per line
+For 犿=荦!犔=荦!槡犕. On a single line, like
+As shown in Figure 2, the two points in the grid at both ends of the line need to be retained.
+When ≥ 1, the retention ratio 2 = 2 shape! 犿 = 2! 槡犕, which indicates
+The smaller the shape, the smaller the retention ratio is. When the shape is ≤1, the average is within each grid.
+The distribution is less than 1 point, because the points at both ends of the line are always retained.
+Therefore, the number of points in the grid at both ends should be counted as 2 (not 2), at this time
+犽=2!犿=2! 槡犕, the larger the value, the smaller the 犽. by
+It can be seen that when the shape=1, the average has 1 data point per grid.
+When the retention ratio is the smallest, the rejection of the unrelated points is the best.
+The number of rows and columns of the grid field is 犔=犆=槡荦.
+Figure 2 Selection of points within the boundary of a single-row grid
+Fig. 2 SelectBoundaryPointsinSingle
+LineoftheGrid
+In order to evaluate the above points, this article uses some of the specific maps.
+A number of experiments were conducted on random point sets generated under shape constraints. Figure 3
+Concentration of test points for random point sets generated by double ellipse constraints
+The number of points is 500,000, 1 million, 2.5 million, and 500
+Million, the number of raster rows is the same as the number of columns in the test, by changing the number of rows
+(or number of columns), the number of points that can be retained after grid-assisted method
+the amount. The test results are shown in Figure 4. The horizontal axis of the graph is the grid rank.
+The vertical axis is the ratio of the original number of points to the number of reserved points.
+For the rejection ratio, it is obvious that the larger the value of the vertical axis indicates the rejection
+The more effective the point inside the convex hull.
+Figure 3 Double elliptical test point set
+Fig. 3 DoubleElliptical-shapedPointSet
+Figure 4 Relationship between the number of rows and columns of the grid and the rejection ratio Test results (1)
+Fig. 4 TestResultofRelationshipBetweenGrid
+RowcolumnNumberandRejectingProportion (1)
+Analysis of Figure 4 shows that although the number of points in each group of test points
+The amount is different, but the "number of rows and columns - rejection ratio" curve shows similar rules
+Law: As the number of rows and columns increases, the rejection ratio increases rapidly first, followed by
+slowing shrieking. Considering the drawing effect, the number of rows and columns is not drawn in the figure.
+The result curve of more than 5000, in fact, the trend is still
+Decrease until it approaches 1. With 500,000 points of test points
+For example, when the number of rows and columns is 25,000, 500,000, 750,000,
+The ratios are 6.326, 1.019, and 1.005, respectively. When the number of rows and columns of the grid is taken
+The value is the square root of the total number of points, which is marked with an asterisk in Figure 4.
+Position, the rejection ratio on the four curves is very close to the maximum value
+The difference is no more than 5%), which is consistent with the previous theoretical analysis. this
+In addition, the test results in Figure 4 also show that the more points in the point set, the gate
+The better the elimination effect of the grid assist method, when the number of points is 5 million, the rejection
+More than 400, in other words, 99.75% of the points are screened out
+It is not necessary to participate in the subsequent convex hull calculation.
+The test point set of Figure 4 is generated under the double ellipse limit
+, the spatial distribution of the point set is exactly the same, or has its special
+Sex. To this end, this paper designed another set of tests, including 3 sets of space.
+404
+Volume 35, No. 4, Wang Jiechen, etc.: A Grid-assisted Planar Point Set Minimum Convex Hull Generation Algorithm
+Different shapes of data, respectively oval (Figure 5), special graphics
+(Fig. 6), a long strip with an aspect ratio of 10:1, each containing 36
+Ten thousand points. The test results are shown in Figure 7, which reflects the laws and
+Figure 4 is basically the same.
+Figure 5 elliptical test point set
+Fig. 5 Elliptical-shaped
+PointSet
+
+Figure 6 Special shape test point set
+Fig. 6 Special-shaped
+PointSet
+Figure 7 Relationship between the number of rows and columns of the grid and the rejection ratio (2)
+Fig. 7 TestResultofRelationshipBetweenGrid
+RowcolumnNumberandRejectingProportion (2)
+2 Testing and analysis
+The main idea of ​​the algorithm in this paper is to use the grid to determine and tick
+Reduce Graham except those that do not contribute to the generation of convex hulls
+The number of points involved in the sorting in the scan algorithm to improve the overallity of the algorithm
+can. In the pre-processing process, it can be realized only by traversing the point set 3 times.
+The elimination of the inner point, the time complexity is 犗 (shape), followed by Gra 
+The time complexity of the ham scanning algorithm is 犗(犺log犺), where the shape is a point
+The total number of points in the set, the number of reserved points, when the shape is total
+The time complexity can be approximated to 犗 (shape).
+In order to evaluate the efficiency of the algorithm, this paper uses a double ellipse limit.
+The set of random points generated by the system was tested and tested.
+The machine configuration is: Intel Core 21.83GHz, memory 1.5GB, operation
+System WindowsXPProSP3, programming environment is Borland
+C++Builder6.0. The number of raster rows and columns in the test is set to the total point.
+The square root of the number, the test results are shown in Table 1, Figure 8.
+Figure 8 Comparison of test results of three algorithms
+Fig. 8 ComparisonofThreeAlgorithms
+The test results in Table 1 indicate that grid-assisted culling is used
+After some internal points, the efficiency of the algorithm is obviously improved, and it is not used.
+Preprocessing and generating convex hull phase directly by Graham scanning algorithm
+More than 20 times higher than the efficiency, with the common use of extreme point partitioning
+Compared with the treatment method, the efficiency is increased by about 3 times. Excluding the inner point
+Table 1 Test Results Table
+Tab. 1 TestResultsofFiveDifferentPointSets
+Total points / 10,000
+Grid-assisted extreme point method
+Reserved points pre-consumption time / ms total elapsed time / ms Reserved points pre-consumption time / ms total elapsed time / ms
+Graham algorithm
+Time-consuming / ms
+10 1649 14 15 11725 16 31 234
+50 3773 62 78 58282 93 218 1344
+100 5534 141 156 116186 156 437 2828
+250 8533 360 375 288727 406 1156 7562
+500 12037 719 750 576266 828 2406 15594
+Note: The pre-consumption time refers to the time taken to perform the point set rough judgment and the elimination of the irrelevant point process. The total elapsed time refers to the total time from the execution of the algorithm to the calculation of the convex hull.
+In terms of time consumption, the extreme point partitioning method is slightly higher than the grid assist method because
+The former needs to position the point and the line (the line between the extreme points)
+Judgment, the amount of calculation is slightly higher than the "rasterization of points";
+The number of grid-assisted methods is much more efficient than the extreme point partitioning method.
+In the test with 5 million points, the former eliminated 99.76%.
+Point, the latter excludes 88.47% of the points, the former retains the reference
+The number of points calculated with the convex hull is only 1/47 of the latter.
+As far as the grid assist method itself is concerned, the pre-consumption takes up a lot of
+Partial calculation time (more than 80%), which is higher than the point inside the convex hull
+Efficiency complements each other, and its retention points are much smaller than the total number of points.
+In the test point with 5 million points, the 犺: shape approximates
+1:415, at this time, the total time-consuming increase of the convex hull is similar to that of
+Linear variation, the time complexity of the algorithm can be approximated to 犗 (shape).
+This paper draws on the idea of ​​grid algorithm in GIS, and will discrete points.
+Assign to the corresponding grid block, using only the discretes within the boundary grid
+Point to calculate the minimum convex hull, most points in the original point set
+It is removed in advance, which effectively improves the efficiency of the algorithm. Into one
+In the step study, try to divide the method, the divide and conquer method, and the extreme points.
+405
+Wuhan University Journal·Information Science Edition April 2010
+Areas and other methods are used in combination, for example, for the participation in convex hull calculation
+Leave a point, further use the extreme point zoning method for screening;
+Uneven point sets, supplemental filtering for dense areas separately. this
+The relevant discussion of the text is based on the set of plane points, when GIS
+Flexible application is required when applying spatial data such as lines and polygons in the application.
+references
+[1] ThomasHC, CharlesEL, RonaldL. Rivest, andClif
+fordStein. IntroductiontoAlgorithms,SecondEdition
+[M]. MITPressandMcGraw-Hill, 2001: 955-956
+[2] Bhm C, KriegelH. DeterminingtheConvex Hull
+Inlarge MultidimensionalDatabases[C]. TheThird
+InternationalConferenceon Data Warehousingand
+KnowledgeDiscovery, Lecture Notesin Computer
+Science, 2001: 294  306
+[3] ChanT. OptimalOutputsensitiveConvexHullAlgo
+rithmsinTwoandThreeDimensions[J]. Discrete &
+Computational Geometry, 1996, 16:361-368
+[4] BhattacharyaB K, SenS. OnaSimple, Practical,
+Optimal, Output-sensitiveRandomizedPlanarCon-
+Vex Hull Algorithm [J]. Journalof Algorithms,
+1997,
