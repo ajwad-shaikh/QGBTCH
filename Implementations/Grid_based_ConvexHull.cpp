@@ -8,6 +8,12 @@ Implementation for Grid-aided algorithm to find minimum convex hull of Planar Po
 
 using namespace std;
 
+struct gridRaster{
+	double top, bottom, start, end;
+	vector < pair < double, double > > points;
+	bool reject;
+};
+
 int main()
 {
     vector < pair <double, double > > S; //Dynamic Array of Points S
@@ -34,4 +40,19 @@ int main()
     	topBoundary = max(topBoundary, S[a].second);
     }
 
+    vector < vector < gridRaster > > space;
+    double gridHeight = (topBoundary - bottomBoundary) / (double) gridSide;
+    double gridWidth = (endBoundary - startBoundary) / (double) gridSide;
+
+    for(int a = 0; a < gridSide; a++)
+    {
+    	vector < gridRaster > dimension;
+    	space.push_back(dimension);
+    	for(int b = 0; b < gridSide; b++)
+    	{
+    		gridRaster tess;
+    		tess.top = tess.bottom = tess.start = tess.end = -1;
+    		space[a].push_back(tess);
+    	}
+    }
 }
