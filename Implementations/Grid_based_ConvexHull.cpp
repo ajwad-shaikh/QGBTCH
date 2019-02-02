@@ -55,4 +55,58 @@ int main()
     		space[a].push_back(tess);
     	}
     }
+
+    cout << gridWidth << endl << gridHeight << endl;
+
+    cout << endl;
+
+    space[0][0].top = topBoundary; space[0][0].start = startBoundary;
+    space[0][0].end = space[0][0].start + gridWidth;
+    space[0][0].bottom = space[0][0].top - gridHeight;
+
+    for(int a = 0; a < space.size(); a++)
+    {
+    	space[a][0].top = topBoundary;
+    	space[a][0].bottom = topBoundary - gridHeight;
+    	space[0][a].start = startBoundary;
+    	space[0][a].end = startBoundary + gridWidth;
+    }
+
+    vector < pair <double, double > > pStack = S;
+    sort(pStack.begin(), pStack.end(), greater < pair < double, double > >() );
+
+    for(int a = 0; a < space.size(); a++)
+    {
+    	for(int b = 0; b < space[a].size(); b++)
+    	{
+    		if(space[a][b].start == -1)
+    		{
+    			space[a][b].start = space[a-1][b].end;
+    			space[a][b].end = space[a][b].start + gridWidth;
+    		}
+			if(space[a][b].top == -1)
+    		{
+    			space[a][b].top = space[a][b-1].bottom;
+    			space[a][b].bottom = space[a][b].top - gridHeight;
+    		}
+			while(	pStack.back().first >= space[a][b].start &&
+					pStack.back().first < space[a][b].end &&
+					pStack.back().second <= space[a][b].bottom &&
+					pStack.back().second > space[a][b].top 			)
+			{
+				space[a][b].points.push_back(pStack.back());
+				pStack.pop_back();
+			}
+    	}
+    }
+
+    for(int a  = 0; a < space.size(); a++)
+    {
+    	for(int b = 0; b < space[a].size(); b++)
+    	{
+    		cout << "\t" <<space[a][b].points.size()  << "\t";
+    	}
+    	cout << endl;
+    }
+
 }
