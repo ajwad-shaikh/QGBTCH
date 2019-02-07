@@ -81,8 +81,16 @@ int main()
     	space[0][a].end = startBoundary + gridWidth;
     }
 
+
     vector < pair <double, double > > pStack(S);
-    sort(pStack.begin(), pStack.end(), gridArrange); // greater < pair < double, double > >() );
+    sort(pStack.begin(), pStack.end(), gridArrange);// greater < pair < double, double > >() );
+
+    for(int a  = 0; a < pStack.size(); a++)
+    {
+        cout << pStack[a].first << " " << pStack[a].second << "\t";
+    }
+
+    cout << endl;
 
     for(int a = 0; a < space.size(); a++)
     {
@@ -113,9 +121,27 @@ int main()
     {
     	for(int b = 0; b < space[a].size(); b++)
     	{
-    		cout << "\t" <<space[a][b].top << " " << space[a][b].bottom << " " << space[a][b].start << " " << space[a][b].end  << "\t";
+            cout << "\t" <<space[a][b].top << " " << space[a][b].bottom << " " << space[a][b].start << " " << space[a][b].end  << "\t";
             cout << "\t" << space[a][b].points.size() << "\t";
     	}
     	cout << endl;
     }
+
 }
+/*
+25
+1 1 2 4 8 9 3 4 6 5
+7 8 9 8 6 2 0 8 2 7
+9 7 1 0 5 1 0 6 4 7
+4 8 9 3 7 1 6 7 1 3
+3 3 7 9 5 2 0 7 0 2
+1.8
+1.8
+
+	0		0		0		0		0
+	0		0		0		0		0
+	0		0		0		0		0
+	0		0		0		0		0
+	0		0		0		0		0
+
+*/
