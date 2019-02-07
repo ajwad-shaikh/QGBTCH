@@ -14,6 +14,15 @@ struct gridRaster{
 	bool reject;
 };
 
+bool gridArrange( pair < double, double > pointA, pair < double, double > pointB)
+{
+
+    if (pointA.first == pointB.first )
+        return pointA.second < pointB.second;
+
+    return pointA.first > pointB.first;
+}
+
 int main()
 {
     vector < pair <double, double > > S; //Dynamic Array of Points S
@@ -72,8 +81,8 @@ int main()
     	space[0][a].end = startBoundary + gridWidth;
     }
 
-    vector < pair <double, double > > pStack = S;
-    sort(pStack.begin(), pStack.end(), greater < pair < double, double > >() );
+    vector < pair <double, double > > pStack(S);
+    sort(pStack.begin(), pStack.end(), gridArrange); // greater < pair < double, double > >() );
 
     for(int a = 0; a < space.size(); a++)
     {
