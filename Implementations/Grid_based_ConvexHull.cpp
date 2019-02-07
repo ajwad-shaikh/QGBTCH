@@ -99,9 +99,9 @@ int main()
     			space[a][b].bottom = space[a][b].top - gridHeight;
     		}
 			while(	pStack.back().first >= space[a][b].start &&
-					pStack.back().first < space[a][b].end &&
-					pStack.back().second <= space[a][b].bottom &&
-					pStack.back().second > space[a][b].top 			)
+					pStack.back().first <= space[a][b].end &&
+					pStack.back().second >= space[a][b].bottom &&
+					pStack.back().second <= space[a][b].top 			)
 			{
 				space[a][b].points.push_back(pStack.back());
 				pStack.pop_back();
@@ -113,9 +113,9 @@ int main()
     {
     	for(int b = 0; b < space[a].size(); b++)
     	{
-    		cout << "\t" <<space[a][b].points.size()  << "\t";
+    		cout << "\t" <<space[a][b].top << " " << space[a][b].bottom << " " << space[a][b].start << " " << space[a][b].end  << "\t";
+            cout << "\t" << space[a][b].points.size() << "\t";
     	}
     	cout << endl;
     }
-
 }
