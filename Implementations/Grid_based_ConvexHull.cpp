@@ -8,32 +8,30 @@ Implementation for Grid-aided algorithm to find minimum convex hull of Planar Po
 
 using namespace std;
 
+const double INT_MIN_POSITIVE = 0.0000001;
+
+struct pointInSpace{
+    double X, Y;
+    int gridX, gridY;
+};
+
 struct gridRaster{
 	double top, bottom, start, end;
-	vector < pair < double, double > > points;
+	vector < pointInSpace* > pointsInGrid;
 	bool reject;
 };
 
-bool gridArrange( pair < double, double > pointA, pair < double, double > pointB)
-{
-
-    if (pointA.first == pointB.first )
-        return pointA.second < pointB.second;
-
-    return pointA.first > pointB.first;
-}
-
 int main()
 {
-    vector < pair <double, double > > S; //Dynamic Array of Points S
+    vector < pointInSpace > S; //Dynamic Array of Points S
     int setSize; // Size of the set of points to be given
     cin >> setSize;
 
     for(int a  = 0; a < setSize; a++)
     {
-        double x, y;
-        cin >> x >> y;
-        S.push_back(make_pair(x, y)); // Adding points to the Dynamic Array S
+        pointInSpace newPoint;
+        cin >> newPoint.X >> newPoint.Y;
+        S.push_back(newPoint); // Adding points to the Dynamic Array S
     }
 
     // We build a square grid so with equal number of rows and columns viz. R = C = sq. root ( setSize )
@@ -43,10 +41,10 @@ int main()
 
     for(int a = 0; a < S.size(); a++)
     {
-    	startBoundary = min(startBoundary, S[a].first);
-    	endBoundary = max(endBoundary, S[a].first);
-    	bottomBoundary = min(bottomBoundary, S[a].second);
-    	topBoundary = max(topBoundary, S[a].second);
+    	startBoundary = min(startBoundary, S[a].X);
+    	endBoundary = max(endBoundary, S[a].X) + INT_MIN_POSITIVE;
+    	bottomBoundary = min(bottomBoundary, S[a].Y);
+    	topBoundary = max(topBoundary, S[a].Y) + INT_MIN_POSITIVE;
     }
 
     vector < vector < gridRaster > > space;
@@ -65,9 +63,14 @@ int main()
     	}
     }
 
-    cout << gridWidth << endl << gridHeight << endl;
+    for(int a = 0; a < S.size(); a++)
+    {
+        S[a].gridY = (S[a].Y - bottomBoundary) / gridHeight;
+        S[a].gridX = (S[a].X - startBoundary) / gridWidth;
+        space[S[a].gridX][S[a].gridY].pointsInGrid.push_back(&S[a]);
+    }
 
-    cout << endl;
+    // cout << gridWidth << endl << gridHeight <<endl;
 
     space[0][0].top = topBoundary; space[0][0].start = startBoundary;
     space[0][0].end = space[0][0].start + gridWidth;
@@ -81,21 +84,11 @@ int main()
     	space[0][a].end = startBoundary + gridWidth;
     }
 
-
-    vector < pair <double, double > > pStack(S);
-    sort(pStack.begin(), pStack.end(), gridArrange);// greater < pair < double, double > >() );
-
-    for(int a  = 0; a < pStack.size(); a++)
-    {
-        cout << pStack[a].first << " " << pStack[a].second << "\t";
-    }
-
-    cout << endl;
-
     for(int a = 0; a < space.size(); a++)
     {
     	for(int b = 0; b < space[a].size(); b++)
     	{
+    		space[a][b].reject = false;
     		if(space[a][b].start == -1)
     		{
     			space[a][b].start = space[a-1][b].end;
@@ -106,14 +99,6 @@ int main()
     			space[a][b].top = space[a][b-1].bottom;
     			space[a][b].bottom = space[a][b].top - gridHeight;
     		}
-			while(	pStack.back().first >= space[a][b].start &&
-					pStack.back().first <= space[a][b].end &&
-					pStack.back().second >= space[a][b].bottom &&
-					pStack.back().second <= space[a][b].top 			)
-			{
-				space[a][b].points.push_back(pStack.back());
-				pStack.pop_back();
-			}
     	}
     }
 
@@ -121,12 +106,11 @@ int main()
     {
     	for(int b = 0; b < space[a].size(); b++)
     	{
-            cout << "\t" <<space[a][b].top << " " << space[a][b].bottom << " " << space[a][b].start << " " << space[a][b].end  << "\t";
-            cout << "\t" << space[a][b].points.size() << "\t";
+            // cout << "\t" <<space[a][b].top << " " << space[a][b].bottom << " " << space[a][b].start << " " << space[a][b].end  << "\t";
+            cout << "\t" << space[a][b].pointsInGrid.size() << "\t";
     	}
     	cout << endl;
     }
-
 }
 /*
 25
