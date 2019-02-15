@@ -184,7 +184,7 @@ int main()
     	cout << endl;
     }
 
-    cout << "boolean \n";
+    cout << endl;
 
     for(int a  = 0; a < space.size(); a++)
     {
@@ -208,4 +208,10 @@ int main()
         1               1               0               1               1
         1               1               1               1               2
         0               1               0               1               2
+
+        0               0               1               0               0
+        1               0               0               0               1
+        0               1               1               1               0
+        0               1               0               1               0
+        1               0               1               0               0
 */
