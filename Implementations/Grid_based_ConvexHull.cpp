@@ -8,6 +8,7 @@ Implementation for Grid-aided algorithm to find minimum convex hull of Planar Po
 #include "..\Libraries\matplotlib\matplotlibcpp.h"
 
 using namespace std;
+namespace plt = matplotlibcpp;
 
 const double INT_MIN_POSITIVE = 0.0000001;
 
@@ -175,15 +176,28 @@ int main()
             space.back()[a].reject = false;
     }
 
+    vector <double> plotVectX;
+    vector <double> plotVectY;
+
     for(int a  = 0; a < space.size(); a++)
     {
     	for(int b = 0; b < space[a].size(); b++)
     	{
             // cout << "\t" <<space[a][b].top << " " << space[a][b].bottom << " " << space[a][b].start << " " << space[a][b].end  << "\t";
             cout << "\t" << space[a][b].pointsInGrid.size() << "\t";
+            if(space[a][b].pointsInGrid.size() > 0)
+            {
+                for(int c = 0;c < space[a][b].pointsInGrid.size(); c++ )
+                {
+                    plotVectX.push_back(space[a][b].pointsInGrid[c]->X);
+                    plotVectY.push_back(space[a][b].pointsInGrid[c]->Y);
+                }
+            }
     	}
     	cout << endl;
     }
+    plt::scatter(plotVectX, plotVectY);
+    plt::show();
 
     cout << endl;
 
