@@ -5,6 +5,7 @@ Implementation for Grid-aided algorithm to find minimum convex hull of Planar Po
 **/
 
 #include<bits/stdc++.h>
+#include "..\Libraries\matplotlib\matplotlibcpp.h"
 
 using namespace std;
 
