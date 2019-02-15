@@ -21,6 +21,16 @@ struct gridRaster{
 	bool reject;
 };
 
+int cSumOfGridPoints(vector <gridRaster> &colRaster)
+{
+    int cSumFinal = 0;
+    for(int a = 0; a < colRaster.size(); a++)
+    {
+        cSumFinal += colRaster[a].pointsInGrid.size();
+    }
+    return cSumFinal;
+}
+
 int main()
 {
     vector < pointInSpace > S; //Dynamic Array of Points S
@@ -88,7 +98,6 @@ int main()
     {
     	for(int b = 0; b < space[a].size(); b++)
     	{
-    		space[a][b].reject = false;
     		if(space[a][b].start == -1)
     		{
     			space[a][b].start = space[a-1][b].end;
@@ -100,6 +109,35 @@ int main()
     			space[a][b].bottom = space[a][b].top - gridHeight;
     		}
     	}
+    }
+
+    for(int a = 0; a < space.size(); a++)
+    {
+        int b = 0;
+        int cSum = 0;
+        int cSumFinal = cSumOfGridPoints(space[a]);
+        // cout << "cSumFinal "<< a << ": " << cSumFinal << endl;
+        while(b!= space[a].size())
+        {
+            int cSumNew = space[a][b].pointsInGrid.size() + cSum;
+            if(cSum == 0 && cSumNew != 0)
+            {
+                space[a][b].reject = false;
+            }
+            else if(cSum == cSumFinal && cSumNew == cSumFinal)
+            {
+                space[a][b-1].reject = false;
+                space[a][b].reject = true;
+            }
+            else
+            {
+                space[a][b].reject = true;
+            }
+            b++;
+            cSum = cSumNew;
+        }
+        if(space[a].back().pointsInGrid.size() != 0 && space[a].back().reject)
+            space[a].back().reject = false;
     }
 
     for(int a  = 0; a < space.size(); a++)
