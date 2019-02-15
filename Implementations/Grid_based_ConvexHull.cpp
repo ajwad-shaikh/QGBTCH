@@ -31,6 +31,16 @@ int cSumOfGridPoints(vector <gridRaster> &colRaster)
     return cSumFinal;
 }
 
+int rSumOfGridPoints(vector < vector <gridRaster> > &space, int colID)
+{
+    int rSumFinal = 0;
+    for(int a = 0; a < space.size(); a++)
+    {
+        rSumFinal += space[a][colID].pointsInGrid.size();
+    }
+    return rSumFinal;
+}
+
 int main()
 {
     vector < pointInSpace > S; //Dynamic Array of Points S
@@ -140,12 +150,48 @@ int main()
             space[a].back().reject = false;
     }
 
+    for(int a = 0; a < space.size(); a++)
+    {
+        int b = 0;
+        int rSum = 0;
+        int rSumFinal = rSumOfGridPoints(space, a);
+        // cout << "rSumFinal "<< a << ": " << rSumFinal << endl;
+        while(b!= space.size())
+        {
+            int rSumNew = space[b][a].pointsInGrid.size() + rSum;
+            if(rSum == 0 && rSumNew != 0)
+            {
+                space[b][a].reject = false;
+            }
+            else if(rSum == rSumFinal && rSumNew == rSumFinal)
+            {
+                space[b-1][a].reject = false;
+            }
+            b++;
+            rSum = rSumNew;
+        }
+        if(space.back()[a].pointsInGrid.size() != 0 && space.back()[a].reject)
+            space.back()[a].reject = false;
+    }
+
     for(int a  = 0; a < space.size(); a++)
     {
     	for(int b = 0; b < space[a].size(); b++)
     	{
             // cout << "\t" <<space[a][b].top << " " << space[a][b].bottom << " " << space[a][b].start << " " << space[a][b].end  << "\t";
             cout << "\t" << space[a][b].pointsInGrid.size() << "\t";
+    	}
+    	cout << endl;
+    }
+
+    cout << "boolean \n";
+
+    for(int a  = 0; a < space.size(); a++)
+    {
+    	for(int b = 0; b < space[a].size(); b++)
+    	{
+    		// cout << "\t" <<space[a][b].top << " " << space[a][b].bottom << " " << space[a][b].start << " " << space[a][b].end  << "\t";
+            cout << "\t" << space[a][b].reject << "\t";
     	}
     	cout << endl;
     }
