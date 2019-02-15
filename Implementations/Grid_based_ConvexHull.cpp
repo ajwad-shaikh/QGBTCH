@@ -52,7 +52,9 @@ int main()
     for(int a  = 0; a < setSize; a++)
     {
         pointInSpace newPoint;
-        cin >> newPoint.X >> newPoint.Y;
+        // cin >> newPoint.X >> newPoint.Y;
+        newPoint.X = rand() % 5000;
+        newPoint.Y = rand() % 5000;
         S.push_back(newPoint); // Adding points to the Dynamic Array S
     }
 
@@ -176,8 +178,10 @@ int main()
             space.back()[a].reject = false;
     }
 
-    vector <double> plotVectX;
-    vector <double> plotVectY;
+    vector <double> plotTrueVectX;
+    vector <double> plotTrueVectY;
+    vector <double> plotFalseVectX;
+    vector <double> plotFalseVectY;
 
     for(int a  = 0; a < space.size(); a++)
     {
@@ -187,17 +191,30 @@ int main()
             cout << "\t" << space[a][b].pointsInGrid.size() << "\t";
             if(space[a][b].pointsInGrid.size() > 0)
             {
-                for(int c = 0;c < space[a][b].pointsInGrid.size(); c++ )
+                if(space[a][b].reject)
                 {
-                    plotVectX.push_back(space[a][b].pointsInGrid[c]->X);
-                    plotVectY.push_back(space[a][b].pointsInGrid[c]->Y);
+                    for(int c = 0;c < space[a][b].pointsInGrid.size(); c++ )
+                    {
+                        plotTrueVectX.push_back(space[a][b].pointsInGrid[c]->X);
+                        plotTrueVectY.push_back(space[a][b].pointsInGrid[c]->Y);
+                    }
+                }
+                else
+                {
+                    for(int c = 0;c < space[a][b].pointsInGrid.size(); c++ )
+                    {
+                        plotFalseVectX.push_back(space[a][b].pointsInGrid[c]->X);
+                        plotFalseVectY.push_back(space[a][b].pointsInGrid[c]->Y);
+                    }
                 }
             }
     	}
     	cout << endl;
     }
-    plt::scatter(plotVectX, plotVectY);
-    plt::show();
+
+    plt::scatter(plotTrueVectX, plotTrueVectY, 2);
+    plt::scatter(plotFalseVectX, plotFalseVectY, 2);
+    plt::title("Grid-aided algorithm to find minimum convex hull of Planar Points Set");
 
     cout << endl;
 
@@ -210,6 +227,7 @@ int main()
     	}
     	cout << endl;
     }
+    plt::show();
 }
 /*
 25
