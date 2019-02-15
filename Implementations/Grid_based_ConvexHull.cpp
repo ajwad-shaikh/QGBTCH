@@ -53,8 +53,8 @@ int main()
     {
         pointInSpace newPoint;
         // cin >> newPoint.X >> newPoint.Y;
-        newPoint.X = rand() % 5000;
-        newPoint.Y = rand() % 5000;
+        newPoint.X = rand() % 500;
+        newPoint.Y = rand() % 500;
         S.push_back(newPoint); // Adding points to the Dynamic Array S
     }
 
@@ -212,8 +212,8 @@ int main()
     	cout << endl;
     }
 
-    plt::scatter(plotTrueVectX, plotTrueVectY, 2);
-    plt::scatter(plotFalseVectX, plotFalseVectY, 2);
+    plt::scatter(plotTrueVectX, plotTrueVectY, 5);
+    plt::scatter(plotFalseVectX, plotFalseVectY, 5);
     plt::title("Grid-aided algorithm to find minimum convex hull of Planar Points Set");
 
     cout << endl;
