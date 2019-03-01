@@ -12,6 +12,12 @@ namespace plt = matplotlibcpp;
 
 const double INT_MIN_POSITIVE = 0.0000001;
 
+struct binaryNode{
+    double abscissa;
+    double minY, minX;
+    binaryNode *prev, *next;
+};
+
 struct pointInSpace{
     double X, Y;
     int gridX, gridY;
@@ -43,6 +49,25 @@ int rSumOfGridPoints(vector < vector <gridRaster> > &space, int colID)
     return rSumFinal;
 }
 
+struct binaryNode* newNode(pointInSpace* pointNew)
+{
+
+}
+
+struct binaryNode* genBTree( vector < pointInSpace* > gridFilteredPoints, int start , int finish )
+{
+    if(start > finish)
+        return NULL;
+
+    int mid = (start + finish) / 2;
+    struct binaryNode* root = newNode(gridFilteredPoints[mid]);
+
+    root->prev = genBTree(gridFilteredPoints, start, mid-1);
+    root->next = genBTree(gridFilteredPoints, mid+1, finish);
+
+    return root;
+}
+
 int main()
 {
     vector < pointInSpace > S; //Dynamic Array of Points S
@@ -53,8 +78,20 @@ int main()
     {
         pointInSpace newPoint;
         // cin >> newPoint.X >> newPoint.Y;
+        /** Standard Distribution **/
         newPoint.X = rand() % 500;
         newPoint.Y = rand() % 500;
+
+        /** Triangular Distributions **/
+        //newPoint.Y = rand() % (int)floor(newPoint.X);
+        //newPoint.X = rand() % (int)floor(newPoint.Y);
+
+        //Circular Distribution
+        double alpha = 2 * 3.142 * (rand());
+        double r = 500 * sqrt(rand());
+        newPoint.X = r * cos(alpha);
+        newPoint.Y = r * sin(alpha);
+
         S.push_back(newPoint); // Adding points to the Dynamic Array S
     }
 
@@ -178,6 +215,8 @@ int main()
             space.back()[a].reject = false;
     }
 
+    vector < pointInSpace* > gridFilteredPoints;
+
     vector <double> plotTrueVectX;
     vector <double> plotTrueVectY;
     vector <double> plotFalseVectX;
@@ -188,7 +227,7 @@ int main()
     	for(int b = 0; b < space[a].size(); b++)
     	{
             // cout << "\t" <<space[a][b].top << " " << space[a][b].bottom << " " << space[a][b].start << " " << space[a][b].end  << "\t";
-            cout << "\t" << space[a][b].pointsInGrid.size() << "\t";
+            // cout << "\t" << space[a][b].pointsInGrid.size() << "\t";
             if(space[a][b].pointsInGrid.size() > 0)
             {
                 if(space[a][b].reject)
@@ -205,29 +244,39 @@ int main()
                     {
                         plotFalseVectX.push_back(space[a][b].pointsInGrid[c]->X);
                         plotFalseVectY.push_back(space[a][b].pointsInGrid[c]->Y);
+                        gridFilteredPoints.push_back(space[a][b].pointsInGrid[c]);
                     }
                 }
             }
     	}
-    	cout << endl;
+    	// cout << endl;
     }
 
     plt::scatter(plotTrueVectX, plotTrueVectY, 5);
     plt::scatter(plotFalseVectX, plotFalseVectY, 5);
     plt::title("Grid-aided algorithm to find minimum convex hull of Planar Points Set");
 
-    cout << endl;
 
+
+    // cout << endl;
+
+    /*
     for(int a  = 0; a < space.size(); a++)
     {
     	for(int b = 0; b < space[a].size(); b++)
     	{
-    		// cout << "\t" <<space[a][b].top << " " << space[a][b].bottom << " " << space[a][b].start << " " << space[a][b].end  << "\t";
+            cout << "\t" <<space[a][b].top << " " << space[a][b].bottom << " " << space[a][b].start << " " << space[a][b].end  << "\t";
             cout << "\t" << space[a][b].reject << "\t";
     	}
     	cout << endl;
     }
+    */
+
+    binaryNode* rootNode = genBTree(gridFilteredPoints, 0, gridFilteredPoints.size()-1 );
+
     plt::show();
+
+
 }
 /*
 25
