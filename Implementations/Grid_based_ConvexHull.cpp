@@ -86,11 +86,11 @@ int main()
         //newPoint.Y = rand() % (int)floor(newPoint.X);
         //newPoint.X = rand() % (int)floor(newPoint.Y);
 
-        //Circular Distribution
-        double alpha = 2 * 3.142 * (rand());
-        double r = 500 * sqrt(rand());
-        newPoint.X = r * cos(alpha);
-        newPoint.Y = r * sin(alpha);
+        /**Circular Distribution **/
+        //double alpha = 2 * 3.142 * (rand());
+        //double r = 500 * sqrt(rand());
+        //newPoint.X = r * cos(alpha);
+        //newPoint.Y = r * sin(alpha);
 
         S.push_back(newPoint); // Adding points to the Dynamic Array S
     }
