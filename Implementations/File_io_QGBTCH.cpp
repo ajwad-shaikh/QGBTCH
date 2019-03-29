@@ -14,8 +14,7 @@ const double INT_MIN_POSITIVE = 0.0000001;
 
 struct binaryNode{
     double abscissa;
-    double minY, minX;
-    binaryNode *prev, *next;
+    double minY, maxY;
 };
 
 struct pointInSpace{
@@ -49,30 +48,44 @@ int rSumOfGridPoints(vector < vector <gridRaster> > &space, int colID)
     return rSumFinal;
 }
 
-struct binaryNode* newNode(pointInSpace* pointNew)
-{
-
-}
-
-struct binaryNode* genBTree( vector < pointInSpace* > gridFilteredPoints, int start , int finish )
-{
-    if(start > finish)
-        return NULL;
-
-    int mid = (start + finish) / 2;
-    struct binaryNode* root = newNode(gridFilteredPoints[mid]);
-
-    root->prev = genBTree(gridFilteredPoints, start, mid-1);
-    root->next = genBTree(gridFilteredPoints, mid+1, finish);
-
-    return root;
-}
-
 int main()
 {
     vector < pointInSpace > S; //Dynamic Array of Points S
-    std::ifstream fx("stef01_x.txt");
-    std::ifstream fy("stef01_y.txt");
+    cout << "Choose Image : \n1: Stance \n2: Rat\n3: Face\n";
+    int choice;
+    cin >> choice;
+    string fileNameX, fileNameY;
+
+    switch(choice)
+    {
+        case 1:
+        {
+            fileNameX = "stef01_x.txt";
+            fileNameY = "stef01_y.txt";
+            break;
+        }
+        case 2:
+        {
+            fileNameX = "rat01_x.txt";
+            fileNameY = "rat01_y.txt";
+            break;
+        }
+        case 3:
+        {
+            fileNameX = "face1_x.txt";
+            fileNameY = "face1_y.txt";
+            break;
+        }
+        case 4:
+        {
+            fileNameX = "personal_car_15_x.txt";
+            fileNameY = "personal_car_15_y.txt";
+            break;
+        }
+    }
+
+    std::ifstream fx(fileNameX);
+    std::ifstream fy(fileNameY);
 
     int tx, ty;
     while(fx >> tx && fy >> ty)
@@ -240,11 +253,63 @@ int main()
     	// cout << endl;
     }
 
-    plt::scatter(plotTrueVectX, plotTrueVectY, 1);
+    cout << "Points in Original Image : " << plotFalseVectX.size() + plotTrueVectX.size() << endl;
+    cout << "Points on Convex Hull : " << plotFalseVectX.size() << endl;
+    cout << "Approximate reduction in computation : " << ((float) plotTrueVectX.size() * 100) / ((float) plotFalseVectX.size() + (float) plotTrueVectX.size()) << " %";
+
+    //plt::scatter(plotTrueVectX, plotTrueVectY, 1);
     plt::scatter(plotFalseVectX, plotFalseVectY, 1);
     plt::title("Grid-aided algorithm to find minimum convex hull of Planar Points Set");
 
+    sort(gridFilteredPoints.begin(), gridFilteredPoints.end());
+    vector< binaryNode> hullFinal;
 
+    for(int a = 0; a < gridFilteredPoints.size(); a++)
+    {
+        int tabsc = gridFilteredPoints[a]->X;
+        binaryNode pointInHull;
+        pointInHull.abscissa = tabsc;
+        pointInHull.minY = gridFilteredPoints[a]->Y;
+        pointInHull.maxY = INT_MAX;
+        if(gridFilteredPoints[a+1]->X != tabsc)
+        {
+            hullFinal.push_back(pointInHull);
+            continue;
+        }
+        while(gridFilteredPoints[a+1]->X == tabsc)
+        {
+            a++;
+            if(a+1==gridFilteredPoints.size())
+                break;
+        }
+        if(a+1 == gridFilteredPoints.size())
+        {
+            hullFinal.push_back(pointInHull);
+            break;
+        }
+        pointInHull.maxY = gridFilteredPoints[a]->Y;
+        hullFinal.push_back(pointInHull);
+    }
+    vector <double> plotHullX, plotHullY;
+    for(int a = 0; a < hullFinal.size(); a++)
+    {
+        if(hullFinal[a].minY != INT_MAX)
+        {
+            plotHullX.push_back(hullFinal[a].abscissa);
+            plotHullY.push_back(hullFinal[a].minY);
+        }
+    }
+    plt::plot(plotHullX, plotHullY, "r-");
+    plotHullX.clear(); plotHullY.clear();
+    for(int a = 0; a < hullFinal.size(); a++)
+    {
+        if(hullFinal[a].maxY != INT_MAX)
+        {
+            plotHullX.push_back(hullFinal[a].abscissa);
+            plotHullY.push_back(hullFinal[a].maxY);
+        }
+    }
+    plt::plot(plotHullX, plotHullY, "y-");
 
     // cout << endl;
 
@@ -260,7 +325,7 @@ int main()
     }
     */
 
-    binaryNode* rootNode = genBTree(gridFilteredPoints, 0, gridFilteredPoints.size()-1 );
+    //binaryNode* rootNode = genBTree(gridFilteredPoints, 0, gridFilteredPoints.size()-1 );
 
     plt::show();
 
